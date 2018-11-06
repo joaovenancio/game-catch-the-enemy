@@ -5,6 +5,7 @@
  */
 package trabalhoso;
 
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -18,14 +19,15 @@ import javax.swing.JButton;
  */
 public class TelaJogo extends javax.swing.JFrame {
 
-    private ControladorJogo controlador;
+    ControladorJogo controlador;
     private Container conteudos;
-    private JButton[][] quadrados = new JButton[ControladorJogo.MAX_POSICOES][ControladorJogo.MAX_POSICOES];
+    JButtonJogo[][] botoes = new JButtonJogo[ControladorJogo.MAX_POSICOES][ControladorJogo.MAX_POSICOES];
     private ImageIcon imagemInimigo = new ImageIcon("inimig.png");
     
     //Init componentes:
-    public TelaJogo () {
+    public TelaJogo (ControladorJogo controlador) {
         super("Clique nos inimigos para ganhar!");
+        this.controlador = controlador;
         
         this.conteudos = this.getContentPane();
         this.conteudos.setLayout(new GridLayout(ControladorJogo.MAX_POSICOES,ControladorJogo.MAX_POSICOES));
@@ -34,9 +36,9 @@ public class TelaJogo extends javax.swing.JFrame {
         
         for (int i = 0; i < ControladorJogo.MAX_POSICOES; i++) {
             for (int j = 0; j < ControladorJogo.MAX_POSICOES; j++) {
-                this.quadrados[i][j] = new JButton();
-                this.quadrados[i][j].addActionListener(tratadorDeBotao);
-                this.conteudos.add(this.quadrados[i][j]);
+                this.botoes[i][j] = new JButtonJogo(-1); //-1 significa que nao tem inimigo
+                this.botoes[i][j].addActionListener(tratadorDeBotao);
+                this.conteudos.add(this.botoes[i][j]);
                 
             }
         }
@@ -50,6 +52,33 @@ public class TelaJogo extends javax.swing.JFrame {
         
     }
     
+    public synchronized void inserirInimigo (int posicaoX, int posicaoY, int numeroInimigo) {
+        this.botoes[posicaoX][posicaoY].setNumeroInimigo(numeroInimigo);
+        //Colocar a imagem no botao
+        this.botoes[posicaoX][posicaoY].setBackground(Color.red);
+    }
+    
+    public synchronized void atualizarInimigo(int posicaoX, int posicaoY, int novaPosicaoX, int novaPosicaoY) {
+        int numeroInimigo = this.removerInimigo(posicaoX, posicaoY);
+        this.inserirInimigo(novaPosicaoX, novaPosicaoY, numeroInimigo);
+        
+        this.repaint();
+        return;
+    }
+    
+    public synchronized void atualizarTela () {
+        this.repaint();
+    }
+    
+    public synchronized int removerInimigo(int posicaoX, int posicaoY) {
+        int numeroInimigo = this.botoes[posicaoX][posicaoY].getNumeroInimigo();
+        this.botoes[posicaoX][posicaoY].setNumeroInimigo(-1); //Desalocar o inimigo do botao
+        //Tirar a imagem do botao
+        this.botoes[posicaoX][posicaoY].setBackground(null);
+        //
+        return numeroInimigo;
+    }
+    
     private class TratadorDeBotoes implements ActionListener {
 
         @Override
@@ -58,9 +87,11 @@ public class TelaJogo extends javax.swing.JFrame {
             
             for (int i = 0; i < ControladorJogo.MAX_POSICOES; i++) {
                 for (int j = 0; j < ControladorJogo.MAX_POSICOES; j++) {
-                    if (botaoClicado.equals(TelaJogo.this.quadrados[i][j])) {
+                    if (botaoClicado.equals(TelaJogo.this.botoes[i][j])) {
                         //Executa comando passando i e j
-                        System.out.println("Posição X=" + i + " e Y=" + j);
+                        System.out.println("Posição X=" + i + " e Y=" + j + " -- Inimigo: " + TelaJogo.this.botoes[i][j].getNumeroInimigo());
+                        new VerificarAcertoInimigo(TelaJogo.this, i,j).execute();
+                        //TelaJogo.this.controlador.verificarAcerto(i, j, TelaJogo.this.botoes[i][j].getNumeroInimigo());
                         return;
                     }
                 }
@@ -92,7 +123,7 @@ public class TelaJogo extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jMenu1.setText("File");
+        jMenu1.setText("Iniciar Nova Partida");
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Edit");
@@ -144,7 +175,7 @@ public class TelaJogo extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TelaJogo().setVisible(true);
+                new TelaJogo(new ControladorJogo()).setVisible(true);
             }
         });
     }
@@ -154,4 +185,6 @@ public class TelaJogo extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     // End of variables declaration//GEN-END:variables
+
+    
 }
