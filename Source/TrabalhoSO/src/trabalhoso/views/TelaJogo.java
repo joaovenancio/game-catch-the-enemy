@@ -3,15 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package trabalhoso;
+package trabalhoso.views;
 
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import javafx.embed.swing.JFXPanel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import trabalhoso.ControladorJogo;
+import trabalhoso.JButtonJogo;
 
 /**
  *
@@ -49,6 +55,8 @@ public class TelaJogo extends javax.swing.JFrame {
         this.setResizable(true);
         this.setLocationRelativeTo(null);
         setVisible(true);
+        
+        
         
     }
     
@@ -186,5 +194,11 @@ public class TelaJogo extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     // End of variables declaration//GEN-END:variables
 
+    public void ligar() {
+        this.setVisible(true);
+    }
     
+    public void desligar(){
+        this.setVisible(false);
+    }
 }
