@@ -11,13 +11,13 @@ package trabalhoso;
  */
 public enum Dificuldade {
     //Enums:
-    FACIL(300,20),
+    FACIL(300,3000),
     INTERMEDIARIO(200,10),
     DIFICIL(100,5);
     
     //Atributos:
     private int tempoMaximoJogo;
-    private int tempoMovimentoFicha;
+    private long tempoMovimentoFicha;
     
     //Construtor:
     private Dificuldade(int tempoMaximoJogo, int tempoMovimentoFicha) {
@@ -31,7 +31,7 @@ public enum Dificuldade {
         return tempoMaximoJogo;
     }
 
-    public int getTempoMovimentoFicha() {
+    public long getTempoMovimentoFicha() {
         return tempoMovimentoFicha;
     }
 }
