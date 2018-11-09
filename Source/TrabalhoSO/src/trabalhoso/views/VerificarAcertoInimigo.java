@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package trabalhoso;
+package trabalhoso.views;
 
+import trabalhoso.views.TelaJogo;
 import javax.swing.SwingWorker;
 
 /**
