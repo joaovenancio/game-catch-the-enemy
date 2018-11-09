@@ -40,7 +40,7 @@ class Inimigo extends Thread{
         
         while (!this.derrotado) {
             try {
-                this.sleep(3000l);
+                this.sleep(200);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Inimigo.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -49,9 +49,6 @@ class Inimigo extends Thread{
             int movimento = this.random.nextInt(4); //Retorna 0 - drieita, 1 - esquerda, 2 - baixo, 3 - cima
             this.verificarMovimento(movimento);
         }
-        
-        //Remover da GUI esse inimigo
-        
         
     }
     
@@ -111,6 +108,7 @@ class Inimigo extends Thread{
     
     public synchronized boolean verificarAcertoEmInimigo(int posicaoX, int posicaoY, int numeroInimigo) {
         if (this.numeroInimigo == numeroInimigo && this.posicaoX == posicaoX && this.posicaoY == posicaoY) {
+            //Remover da GUI esse inimigo
             this.controlador.removerInimigo(this.posicaoX,this.posicaoY); //Precisa ser sincornizado
             this.derrotado = true;
             return true;
