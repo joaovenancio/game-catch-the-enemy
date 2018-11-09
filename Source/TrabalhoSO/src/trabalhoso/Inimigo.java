@@ -34,7 +34,7 @@ class Inimigo extends Thread{
     
     //Metodos:
     @Override
-    public synchronized void run() {
+    public void run() {
         
         this.controlador.inserirInimigo(this.posicaoX, this.posicaoY, this.numeroInimigo);
         
@@ -47,6 +47,16 @@ class Inimigo extends Thread{
 
             //Saber para onde vai se movimentar:
             int movimento = this.random.nextInt(4); //Retorna 0 - drieita, 1 - esquerda, 2 - baixo, 3 - cima
+            this.verificarMovimento(movimento);
+        }
+        
+        //Remover da GUI esse inimigo
+        
+        
+    }
+    
+    private synchronized void verificarMovimento(int movimento) {
+        if (!this.derrotado) {
             switch (movimento) { //Precisa ser sincronizado
                 case 0: //Andar para a direita
                     if (this.possuiEspacoEmX()) {
@@ -81,10 +91,6 @@ class Inimigo extends Thread{
                     break;
             }
         }
-        
-        //Remover da GUI esse inimigo
-        this.controlador.removerInimigo(this.posicaoX,this.posicaoY); //Precisa ser sincornizado
-        
     }
 
     private boolean possuiEspacoEmX() {
@@ -105,7 +111,8 @@ class Inimigo extends Thread{
     
     public synchronized boolean verificarAcertoEmInimigo(int posicaoX, int posicaoY, int numeroInimigo) {
         if (this.numeroInimigo == numeroInimigo && this.posicaoX == posicaoX && this.posicaoY == posicaoY) {
-            //this.derrotado = true;
+            this.controlador.removerInimigo(this.posicaoX,this.posicaoY); //Precisa ser sincornizado
+            this.derrotado = true;
             return true;
         }
         
