@@ -20,11 +20,7 @@ public class TrabalhoSO {
      */
     public static void main(String[] args) {
         ControladorJogo controlador = new ControladorJogo();
-        try {
-            controlador.iniciarJogo();
-        } catch (InterruptedException ex) {
-            Logger.getLogger(TrabalhoSO.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        controlador.mostrarTelaInicial();
         
     }
     
