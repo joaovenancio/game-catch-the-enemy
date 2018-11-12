@@ -35,9 +35,9 @@ class Inimigo extends Thread{
     //Metodos:
     @Override
     public void run() {
-        
+        //Mostrar o inimigo na tela
         this.controlador.inserirInimigo(this.posicaoX, this.posicaoY, this.numeroInimigo);
-        
+        //Ficar rodando:
         while (!this.derrotado) {
             try {
                 this.sleep(3000l);
@@ -56,50 +56,90 @@ class Inimigo extends Thread{
         if (!this.derrotado) {
             switch (movimento) { //Precisa ser sincronizado
                 case 0: //Andar para a direita
-                    if (this.possuiEspacoEmX()) {
-                        int posicaoXAntiga = this.posicaoX;
-                        this.posicaoX++;
-                        this.controlador.atualizarInimigo(posicaoXAntiga, this.posicaoY, this.posicaoX, this.posicaoY); //Precisa ser sincronizado
+                    if (this.possuiEspacoDireita()) {
+                        this.andarDireita();
+                    } else {
+                        this.andarEsquerda();
                     }
                     break;
 
                 case 1: //Andar para a esquerda
-                    if (this.possuiEspacoEmX()) {
-                        int posicaoXAntiga = this.posicaoX;
-                        this.posicaoX--;
-                        this.controlador.atualizarInimigo(posicaoXAntiga, this.posicaoY, this.posicaoX, this.posicaoY);
+                    if (this.possuiEspacoEsquerda()) {
+                        this.andarEsquerda();
+                    } else {
+                        this.andarDireita();
                     }
                     break;
 
                 case 2: //Andar para baixo
-                    if (this.possuiEspacoEmY()) {
-                        int posicaoYAntiga = this.posicaoY;
-                        this.posicaoY++;
-                        this.controlador.atualizarInimigo(this.posicaoX, posicaoYAntiga, this.posicaoX, this.posicaoY);
+                    if (this.possuiEspacoBaixo()) {
+                        this.andarBaixo();
+                    } else {
+                        this.andarCima();
                     }
                     break;
 
                 case 3: //Andar para cima
-                    if (this.possuiEspacoEmY()) {
-                        int posicaoYAntiga = this.posicaoY;
-                        this.posicaoY--;
-                        this.controlador.atualizarInimigo(this.posicaoX, posicaoYAntiga, this.posicaoX, this.posicaoY);
+                    if (this.possuiEspacoCima()) {
+                        this.andarCima();
+                    } else {
+                        this.andarBaixo();
                     }
                     break;
             }
         }
     }
 
-    private boolean possuiEspacoEmX() {
-        if (this.posicaoX-1 < 0 || this.posicaoX+1 > (ControladorJogo.MAX_POSICOES-1)) {
+    private void andarCima() {
+        int posicaoYAntiga = this.posicaoY;
+        this.posicaoY--;
+        this.controlador.atualizarInimigo(this.posicaoX, posicaoYAntiga, this.posicaoX, this.posicaoY);
+    }
+
+    private void andarBaixo() {
+        int posicaoYAntiga = this.posicaoY;
+        this.posicaoY++;
+        this.controlador.atualizarInimigo(this.posicaoX, posicaoYAntiga, this.posicaoX, this.posicaoY);
+    }
+
+    private void andarEsquerda() {
+        int posicaoXAntiga = this.posicaoX;
+        this.posicaoX--;
+        this.controlador.atualizarInimigo(posicaoXAntiga, this.posicaoY, this.posicaoX, this.posicaoY);
+    }
+
+    private void andarDireita() {
+        int posicaoXAntiga = this.posicaoX;
+        this.posicaoX++;
+        this.controlador.atualizarInimigo(posicaoXAntiga, this.posicaoY, this.posicaoX, this.posicaoY); //Precisa ser sincronizado
+    }
+
+    private boolean possuiEspacoDireita() {
+        if (this.posicaoX+1 > (ControladorJogo.MAX_POSICOES-1)) {
             return false;
         } else {
             return true;
         }
     }
     
-    private boolean possuiEspacoEmY() {
-        if (this.posicaoY-1 < 0 || this.posicaoY+1 > (ControladorJogo.MAX_POSICOES-1)) {
+    private boolean possuiEspacoEsquerda() {
+        if (this.posicaoX-1 < 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    
+    private boolean possuiEspacoCima() {
+        if (this.posicaoY-1 < 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    
+    private boolean possuiEspacoBaixo() {
+        if (this.posicaoY+1 > (ControladorJogo.MAX_POSICOES-1)) {
             return false;
         } else {
             return true;
