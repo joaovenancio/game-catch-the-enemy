@@ -5,8 +5,10 @@
  */
 package trabalhoso.views;
 
+import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import trabalhoso.ControladorJogo;
+import trabalhoso.Dificuldade;
 
 /**
  *
@@ -137,6 +139,12 @@ public class TelaInicial extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 
+    public Dificuldade pedirDificuldade () {
+        Dificuldade dificuldade = (Dificuldade) JOptionPane.showInputDialog(null, "SELECIONE UMA DIFICULDADE", "Dificuldade do Jogo",
+        JOptionPane.QUESTION_MESSAGE, null, new Object[] { Dificuldade.FACIL,Dificuldade.INTERMEDIARIO, Dificuldade.DIFICIL }, Dificuldade.FACIL);
+        return dificuldade;
+    }
+    
     public void ligar() {
         this.setVisible(true);
     }
