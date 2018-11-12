@@ -22,6 +22,7 @@ public class TelaInicial extends javax.swing.JFrame {
     public TelaInicial(ControladorJogo controlador) {
         this.controlador = controlador;
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**

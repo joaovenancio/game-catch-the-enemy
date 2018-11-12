@@ -54,7 +54,7 @@ public class TelaJogo extends javax.swing.JFrame {
         this.setSize(800,800);
         this.setResizable(true);
         this.setLocationRelativeTo(null);
-        setVisible(true);
+        setVisible(false);
         
         
         
