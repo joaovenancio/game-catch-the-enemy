@@ -55,6 +55,7 @@ public class ControladorJogo {
     
     public void iniciarJogo() {
         
+        this.telaInicial.pedirDificuldade();
         this.telaJogo.ligar();
         
         //Iniciar o Timer:
@@ -65,7 +66,7 @@ public class ControladorJogo {
                 ControladorJogo.this.semTempo = true;
                 ControladorJogo.this.telaJogo.desligar();
             }
-        }, 100000);
+        }, 193000);
         
         //Iniciar os inimigos:
         for (int i = 0; i < 5; i++) {

@@ -11,7 +11,7 @@ package trabalhoso;
  */
 public enum Dificuldade {
     //Enums:
-    FACIL(300,3000),
+    FACIL(200000,3000),
     INTERMEDIARIO(200,800),
     DIFICIL(100,200);
     
