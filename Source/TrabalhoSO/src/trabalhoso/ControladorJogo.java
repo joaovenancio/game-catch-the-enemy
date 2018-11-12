@@ -109,6 +109,12 @@ public class ControladorJogo {
         }
         this.telaJogo.desligar();
         this.telaJogo = null;
+        //Atualizar os valores para o padrão:
+        this.inimigos = new Inimigo[5];
+        this.pontos = 0;
+        this.terminou = false;
+        this.semTempo = false;
+        //Mostrar a ultima tela:
         this.telaFinal.ligar();
         
     }
