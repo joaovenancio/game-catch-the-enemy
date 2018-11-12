@@ -50,7 +50,7 @@ public class TelaJogo extends javax.swing.JFrame {
         }
         
         //Chamar metodo para atualizar os inimigos aqui
-        
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setSize(800,800);
         this.setResizable(true);
         this.setLocationRelativeTo(null);
