@@ -40,7 +40,7 @@ class Inimigo extends Thread{
         
         while (!this.derrotado) {
             try {
-                this.sleep(200);
+                this.sleep(3000l);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Inimigo.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -111,6 +111,7 @@ class Inimigo extends Thread{
             //Remover da GUI esse inimigo
             this.controlador.removerInimigo(this.posicaoX,this.posicaoY); //Precisa ser sincornizado
             this.derrotado = true;
+            this.controlador.registrarPonto();
             return true;
         }
         

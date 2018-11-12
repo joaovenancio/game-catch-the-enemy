@@ -7,11 +7,15 @@ package trabalhoso;
 
 import trabalhoso.views.TelaJogo;
 import java.io.File;
+import static java.lang.Thread.sleep;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import trabalhoso.views.TelaFinalDoJogo;
 import trabalhoso.views.TelaInicial;
 
 /**
@@ -24,16 +28,22 @@ public class ControladorJogo {
     private Dificuldade dificuldade;
     private TelaInicial telaInicial;
     private TelaJogo telaJogo;
+    private TelaFinalDoJogo telaFinal;
     private Inimigo[] inimigos;
     final JFXPanel fxPanel = new JFXPanel();
+    private int pontos;
     private boolean terminou;
+    private boolean semTempo;
     
     //Construtor:
     public ControladorJogo() {
         this.telaInicial = new TelaInicial(this);
         this.telaJogo = new TelaJogo(this);
+        this.telaFinal = new TelaFinalDoJogo(this);
         this.inimigos = new Inimigo[5];
+        this.pontos = 0;
         this.terminou = false;
+        this.semTempo = false;
         
         //Instanciar logo a musica para jah ficar armazenado na memoria
         String musica = "Laser.wav";
@@ -45,6 +55,19 @@ public class ControladorJogo {
     
     public void iniciarJogo() {
         
+        this.telaJogo.ligar();
+        
+        //Iniciar o Timer:
+        Timer temporizador = new Timer();
+        temporizador.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                ControladorJogo.this.semTempo = true;
+                ControladorJogo.this.telaJogo.desligar();
+            }
+        }, 100000);
+        
+        //Iniciar os inimigos:
         for (int i = 0; i < 5; i++) {
             this.inimigos[i] = new Inimigo(i+1,i+2,i,this);
             this.inimigos[i].start();
@@ -66,18 +89,40 @@ public class ControladorJogo {
         });
         threadMusica.start();
         
-        for (int i = 0; i < 5; i++) {
+        //Esperar pelos inimigos serem eliminados ou 
+        while (!semTempo && (this.pontos < 5)) {
             try {
-                this.inimigos[i].join();
+                sleep(0l);
             } catch (InterruptedException ex) {
                 Logger.getLogger(ControladorJogo.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        System.out.println("IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");
+        
         
         terminou = true;
-        System.out.println("VENCEU!");
+        mediaPlayer.stop();
+        if (semTempo) {
+            this.telaFinal.definirMensagemPerdeu();
+        } else {
+            this.telaFinal.definirMensagemGanhou();
+        }
+        this.telaJogo.desligar();
+        this.telaJogo = null;
+        this.telaFinal.ligar();
+        
     }
     
+    public void jogarNovamente() {
+        this.telaJogo = new TelaJogo(this);
+        System.gc();
+        this.telaInicial.ligar();
+        this.telaFinal.desligar();
+    }
+    
+    public synchronized void registrarPonto() {
+        this.pontos++;
+    }
     
     //Metodos:
     public synchronized void atualizarInimigo (int posicaoX, int posicaoY, int novaPosicaoX, int novaPosicaoY) {
