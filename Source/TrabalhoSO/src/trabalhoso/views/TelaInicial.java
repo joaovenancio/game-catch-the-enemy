@@ -53,6 +53,11 @@ public class TelaInicial extends javax.swing.JFrame {
 
         jButton2.setFont(new java.awt.Font("Alien Encounters", 0, 18)); // NOI18N
         jButton2.setText("CrEditos");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Alien Encounters", 0, 36)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -97,6 +102,10 @@ public class TelaInicial extends javax.swing.JFrame {
         };
         worker.execute();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        JOptionPane.showConfirmDialog(null, "Nome do Lindo: João Vítor Demaria Venâncio\nGIT: https://github.com/joaovenancio", "O FAMOSO", JOptionPane.DEFAULT_OPTION,JOptionPane.PLAIN_MESSAGE);
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
