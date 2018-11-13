@@ -11,9 +11,9 @@ package trabalhoso;
  */
 public enum Dificuldade {
     //Enums:
-    FACIL(200000,3000),
-    INTERMEDIARIO(200,800),
-    DIFICIL(100,200);
+    FACIL(193000,2000),
+    INTERMEDIARIO(80000,1000),
+    DIFICIL(20000,380);
     
     //Atributos:
     private int tempoMaximoJogo;

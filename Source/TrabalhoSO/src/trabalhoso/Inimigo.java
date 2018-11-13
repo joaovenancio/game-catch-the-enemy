@@ -19,15 +19,17 @@ class Inimigo extends Thread{
     private int posicaoX;
     private int posicaoY;
     private int numeroInimigo;
+    private long tempoMovimento;
     private Random random = new Random(Calendar.getInstance().get(Calendar.MILLISECOND)); //Passar como seed para o numero aleatorio a o tempo em milisegundos atual
     private ControladorJogo controlador;
     private boolean derrotado;
     
     //Construtor:
-    public Inimigo(int posicaoX, int posicaoY, int numeroInimigo, ControladorJogo controladorJogo) {
+    public Inimigo(int posicaoX, int posicaoY, int numeroInimigo, long tempoMovimento, ControladorJogo controladorJogo) {
         this.posicaoX = posicaoX;
         this.posicaoY = posicaoY;
         this.numeroInimigo = numeroInimigo;
+        this.tempoMovimento = tempoMovimento;
         this.controlador = controladorJogo;
         this.derrotado = false;
     }
@@ -40,14 +42,22 @@ class Inimigo extends Thread{
         //Ficar rodando:
         while (!this.derrotado) {
             try {
-                this.sleep(3000l);
+                this.sleep(this.tempoMovimento);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Inimigo.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             //Saber para onde vai se movimentar:
             int movimento = this.random.nextInt(4); //Retorna 0 - drieita, 1 - esquerda, 2 - baixo, 3 - cima
-            this.verificarMovimento(movimento);
+            
+            try {
+                this.verificarMovimento(movimento);
+            } catch (NullPointerException ex) {            
+                this.interrupt();
+                this.derrotado = true;
+                break;
+            }
+            
         }
         
     }
@@ -93,25 +103,25 @@ class Inimigo extends Thread{
     private void andarCima() {
         int posicaoYAntiga = this.posicaoY;
         this.posicaoY--;
-        this.controlador.atualizarInimigo(this.posicaoX, posicaoYAntiga, this.posicaoX, this.posicaoY);
+        this.controlador.atualizarInimigo(this.posicaoX, posicaoYAntiga, this.posicaoX, this.posicaoY, this.numeroInimigo);
     }
 
     private void andarBaixo() {
         int posicaoYAntiga = this.posicaoY;
         this.posicaoY++;
-        this.controlador.atualizarInimigo(this.posicaoX, posicaoYAntiga, this.posicaoX, this.posicaoY);
+        this.controlador.atualizarInimigo(this.posicaoX, posicaoYAntiga, this.posicaoX, this.posicaoY, this.numeroInimigo);
     }
 
     private void andarEsquerda() {
         int posicaoXAntiga = this.posicaoX;
         this.posicaoX--;
-        this.controlador.atualizarInimigo(posicaoXAntiga, this.posicaoY, this.posicaoX, this.posicaoY);
+        this.controlador.atualizarInimigo(posicaoXAntiga, this.posicaoY, this.posicaoX, this.posicaoY, this.numeroInimigo);
     }
 
     private void andarDireita() {
         int posicaoXAntiga = this.posicaoX;
         this.posicaoX++;
-        this.controlador.atualizarInimigo(posicaoXAntiga, this.posicaoY, this.posicaoX, this.posicaoY); //Precisa ser sincronizado
+        this.controlador.atualizarInimigo(posicaoXAntiga, this.posicaoY, this.posicaoX, this.posicaoY, this.numeroInimigo); //Precisa ser sincronizado
     }
 
     private boolean possuiEspacoDireita() {

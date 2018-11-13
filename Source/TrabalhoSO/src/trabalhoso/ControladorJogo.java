@@ -17,6 +17,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import trabalhoso.views.TelaFinalDoJogo;
 import trabalhoso.views.TelaInicial;
+import javafx.stage.Stage;
 
 /**
  *
@@ -55,8 +56,8 @@ public class ControladorJogo {
     
     public void iniciarJogo() {
         
-        this.telaInicial.pedirDificuldade();
-        this.telaJogo.ligar();
+        Dificuldade dificuldade = this.telaInicial.pedirDificuldade(); //Pegar a dificuldade
+        this.telaJogo.ligar(); //Mostrar a GUI do jogo
         
         //Iniciar o Timer:
         Timer temporizador = new Timer();
@@ -66,11 +67,11 @@ public class ControladorJogo {
                 ControladorJogo.this.semTempo = true;
                 ControladorJogo.this.telaJogo.desligar();
             }
-        }, 193000);
+        }, dificuldade.getTempoMaximoJogo());
         
         //Iniciar os inimigos:
         for (int i = 0; i < 5; i++) {
-            this.inimigos[i] = new Inimigo(i+1,i+2,i,this);
+            this.inimigos[i] = new Inimigo(i+1,i+2,i, dificuldade.getTempoMovimentoFicha(),this);
             this.inimigos[i].start();
             
         }
@@ -110,11 +111,21 @@ public class ControladorJogo {
         }
         this.telaJogo.desligar();
         this.telaJogo = null;
+        //Terminar as outras Threads:
+        for (int i = 0; i < 5; i++) {
+            try {
+                this.inimigos[i].join(1);
+            } catch (InterruptedException ex) {
+                System.out.println("Thread terminada");
+            }
+            
+        }
         //Atualizar os valores para o padrão:
         this.inimigos = new Inimigo[5];
         this.pontos = 0;
         this.terminou = false;
         this.semTempo = false;
+        temporizador.cancel();
         //Mostrar a ultima tela:
         this.telaFinal.ligar();
         
@@ -132,8 +143,8 @@ public class ControladorJogo {
     }
     
     //Metodos:
-    public synchronized void atualizarInimigo (int posicaoX, int posicaoY, int novaPosicaoX, int novaPosicaoY) {
-        this.telaJogo.atualizarInimigo(posicaoX, posicaoY, novaPosicaoX, novaPosicaoY);
+    public synchronized void atualizarInimigo (int posicaoX, int posicaoY, int novaPosicaoX, int novaPosicaoY, int numeroInimigo) {
+        this.telaJogo.atualizarInimigo(posicaoX, posicaoY, novaPosicaoX, novaPosicaoY, numeroInimigo);
         this.atualizarTela();
     }
     
