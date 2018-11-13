@@ -66,8 +66,8 @@ public class TelaJogo extends javax.swing.JFrame {
         this.botoes[posicaoX][posicaoY].setBackground(Color.red);
     }
     
-    public synchronized void atualizarInimigo(int posicaoX, int posicaoY, int novaPosicaoX, int novaPosicaoY) {
-        int numeroInimigo = this.removerInimigo(posicaoX, posicaoY);
+    public synchronized void atualizarInimigo(int posicaoX, int posicaoY, int novaPosicaoX, int novaPosicaoY, int numeroInimigo) {
+        this.removerInimigo(posicaoX, posicaoY);
         this.inserirInimigo(novaPosicaoX, novaPosicaoY, numeroInimigo);
         
         this.repaint();
